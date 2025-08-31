@@ -27,7 +27,7 @@ ai生成的代码，ai生成的readme，用于ai的ai库，纯纯的ai.
 ### 安装
 
 ```bash
-pip install ai_chat_lib
+poetry install
 ```
 
 ### 基本使用
