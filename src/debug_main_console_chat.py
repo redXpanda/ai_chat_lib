@@ -9,7 +9,11 @@ if __name__ == "__main__":
     
     async def demo():
         """演示用法"""
-        print("=== AI Chat Library 演示 ===\n")
+        print("\n=== AI Chat Library 演示 ===\n")
+
+        # 加载 .env 文件
+        from dotenv import load_dotenv
+        load_dotenv()
       
 
         from ai_chat_lib.chat_interface import ChatInterface
@@ -24,47 +28,44 @@ if __name__ == "__main__":
         print("可用角色:", available_characters)
 
         # 设置提示词变量
-        chat.prompt_manager.set_variable("user", "潘达")
+        chat.prompt_manager.set_variable("user", "Brign")
         
         # 切换角色
-        to_character = "猫娘"
+        to_character = "myassis"
         if to_character in available_characters:
             success = chat.switch_character(to_character)
             print(f"切换角色: {'成功' if success else '失败'}")
             
             if success:
                 character = chat.get_current_character()
-                print(f"当前角色: {character.name}")
-                print(f"角色描述: {character.description}\n")
+                print(f"character: {character.name}")
+                print(f"desc: {character.description}\n")
         
-        # 设置提供商
-        google_provider = GoogleAIProvider(os.environ["GEMINI_API_KEY"])
-        deepseek_provider = DeepSeekProvider(os.environ["DEEP_SEEK_API_KEY"])
+        # set provider
+        google_provider = GoogleAIProvider(os.getenv("GEMINI_API_KEY"))
+        deepseek_provider = DeepSeekProvider(os.getenv("DEEP_SEEK_API_KEY"))
 
-        chat.switch_provider(deepseek_provider)
-        print(f"当前提供商: {chat.get_current_provider().get_provider_name()}")
-        print(f"当前模型: {chat.get_current_provider().model}\n")
+        chat.switch_provider(google_provider)
+        print(f"api provider: {chat.get_current_provider().get_provider_name()}")
+        print(f"model: {chat.get_current_provider().model}\n")
         
-        
-        
-        # 模拟聊天
-        print("=== 开始聊天 ===")
+        print("=== start ===")
 
 
         while True:
-            command = input("：")
+            command = input("You:")
             if command == "close":
                 break
             else:
-                print(f"你说：{command}")
+                ##print(f"You：{command}")
                 try:
 
                     # 调用
-                    # res = await chat.chat(command)
-                    # print(res)
+                    ##res = await chat.chat(command)
+                    ##print("{to_character}: {res}")
 
                     # 流式调用
-                    print("\n流式响应:")
+                    print(f"\n{to_character}:")
                     res = ""
                     async for chunk in chat.chat_stream(command):
                         print(chunk, end="", flush=True)
@@ -76,7 +77,7 @@ if __name__ == "__main__":
                         f.write(f"# You：\n ## {command}\n\n")
                         f.write(f"# Bot：\n ## {res}\n\n")
                 except Exception as e:
-                    print(f"错误：{e}")
+                    print(f"error：{e}")
         
         # 显示聊天历史
         print("=== 聊天历史 ===")

@@ -315,6 +315,8 @@ class ChatInterface:
         self.multi_chat = MultiSessionChatInterface(character_manager, data_adapter, prompt_manager)
         # 自动创建一个默认会话
         self.session_id = self.multi_chat.create_session()
+        self.character_manager = self.multi_chat.character_manager
+        self.prompt_manager = self.multi_chat.prompt_manager
     
     def switch_character(self, character_name: str) -> bool:
         """切换AI角色"""
